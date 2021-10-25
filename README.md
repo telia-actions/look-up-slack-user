@@ -1,2 +1,2 @@
-# slack
-Github action to integrate with Slack
+# notify-slack
+Github action to send notifications to Slack
