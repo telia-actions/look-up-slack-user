@@ -14,6 +14,10 @@ export const initializeClient = (options: InitializeClientOptions) => {
   });
 };
 
-export const lookUpUserByEmail = (options: LookUpUserByEmailOptions) => {
-  return slackClient.users.lookupByEmail(options);
+export const lookUpUserByEmail = async (options: LookUpUserByEmailOptions) => {
+  try {
+    return await slackClient.users.lookupByEmail(options);
+  } catch (e) {
+    return e.data;
+  }
 };

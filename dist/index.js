@@ -9478,10 +9478,12 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         const email = core_1.getInput('email');
         const token = core_1.getInput('token');
         slack_client_1.initializeClient({ token });
-        const response = yield slack_client_1.lookUpUserByEmail({
+        const lookUpResponse = yield slack_client_1.lookUpUserByEmail({
             email,
         });
-        core_1.setOutput('user', response.user);
+        if (lookUpResponse.ok) {
+            core_1.setOutput('user', lookUpResponse.user);
+        }
     }
     catch (e) {
         core_1.setFailed(e.message);
@@ -9518,6 +9520,15 @@ __exportStar(__webpack_require__(1123), exports);
 
 "use strict";
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -9534,9 +9545,14 @@ const initializeClient = (options) => {
     });
 };
 exports.initializeClient = initializeClient;
-const lookUpUserByEmail = (options) => {
-    return slackClient.users.lookupByEmail(options);
-};
+const lookUpUserByEmail = (options) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        return yield slackClient.users.lookupByEmail(options);
+    }
+    catch (e) {
+        return e.data;
+    }
+});
 exports.lookUpUserByEmail = lookUpUserByEmail;
 
 

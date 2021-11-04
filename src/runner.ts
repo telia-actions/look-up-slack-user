@@ -8,11 +8,13 @@ export const run = async (): Promise<void> => {
 
     initializeClient({ token });
 
-    const response = await lookUpUserByEmail({
+    const lookUpResponse = await lookUpUserByEmail({
       email,
     });
 
-    setOutput('user', response.user);
+    if (lookUpResponse.ok) {
+      setOutput('user', lookUpResponse.user);
+    }
   } catch (e) {
     setFailed(e.message);
   }
