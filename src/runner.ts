@@ -1,5 +1,5 @@
 import { setFailed, setOutput, getInput } from '@actions/core';
-import { initializeClient, lookUpUserByEmail } from './services/slack-client';
+import { initializeClient, lookUpUserByEmail } from './utils/slackClient';
 
 export const run = async (): Promise<void> => {
   try {

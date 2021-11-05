@@ -9443,7 +9443,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 399:
+/***/ 6144:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -9472,13 +9472,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core_1 = __webpack_require__(2186);
-const slack_client_1 = __webpack_require__(3412);
+const slackClient_1 = __webpack_require__(2758);
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const email = core_1.getInput('email');
         const token = core_1.getInput('token');
-        slack_client_1.initializeClient({ token });
-        const lookUpResponse = yield slack_client_1.lookUpUserByEmail({
+        slackClient_1.initializeClient({ token });
+        const lookUpResponse = yield slackClient_1.lookUpUserByEmail({
             email,
         });
         if (lookUpResponse.ok) {
@@ -9494,7 +9494,7 @@ exports.run = run;
 
 /***/ }),
 
-/***/ 3412:
+/***/ 6076:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9510,12 +9510,57 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(1123), exports);
+__exportStar(__webpack_require__(5329), exports);
 
 
 /***/ }),
 
-/***/ 1123:
+/***/ 5329:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createProxyAgent = void 0;
+const https_proxy_agent_1 = __importDefault(__webpack_require__(7219));
+const createProxyAgent = () => {
+    const { https_proxy, HTTPS_PROXY } = process.env;
+    const proxy = https_proxy || HTTPS_PROXY;
+    if (!proxy) {
+        throw new Error(`Couldn't create proxy agent: No proxy configuration found`);
+    }
+    return https_proxy_agent_1.default(proxy);
+};
+exports.createProxyAgent = createProxyAgent;
+
+
+/***/ }),
+
+/***/ 2758:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__webpack_require__(6626), exports);
+
+
+/***/ }),
+
+/***/ 6626:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9529,28 +9574,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.lookUpUserByEmail = exports.initializeClient = void 0;
 const web_api_1 = __webpack_require__(431);
-const https_proxy_agent_1 = __importDefault(__webpack_require__(7219));
+const proxy_client_1 = __webpack_require__(6076);
 let slackClient;
 const initializeClient = (options) => {
-    const { https_proxy } = process.env;
-    const agent = https_proxy ? https_proxy_agent_1.default(https_proxy) : undefined;
     slackClient = new web_api_1.WebClient(options.token, {
-        agent,
+        agent: proxy_client_1.createProxyAgent(),
     });
 };
 exports.initializeClient = initializeClient;
 const lookUpUserByEmail = (options) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         return yield slackClient.users.lookupByEmail(options);
     }
     catch (e) {
-        return e.data;
+        if (((_a = e.data) === null || _a === void 0 ? void 0 : _a.error) === 'users_not_found') {
+            return e.data;
+        }
+        throw e;
     }
 });
 exports.lookUpUserByEmail = lookUpUserByEmail;
@@ -9732,6 +9776,6 @@ module.exports = require("zlib");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(399);
+/******/ 	return __webpack_require__(6144);
 /******/ })()
 ;
