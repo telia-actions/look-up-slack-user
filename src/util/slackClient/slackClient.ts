@@ -1,5 +1,5 @@
 import { WebClient } from '@slack/web-api';
-import { createProxyAgent } from '../proxy-client';
+import { createProxyAgent } from '../proxyClient';
 import { InitializeClientOptions, LookUpUserByEmailOptions } from './types';
 
 let slackClient: WebClient;

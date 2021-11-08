@@ -9472,7 +9472,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core_1 = __webpack_require__(2186);
-const slackClient_1 = __webpack_require__(2758);
+const slackClient_1 = __webpack_require__(3029);
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const email = core_1.getInput('email');
@@ -9484,6 +9484,9 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         if (lookUpResponse.ok) {
             core_1.setOutput('user', lookUpResponse.user);
         }
+        else {
+            core_1.debug(`User with email: ${email} couldn't be resolved.`);
+        }
     }
     catch (e) {
         core_1.setFailed(e.message);
@@ -9494,7 +9497,7 @@ exports.run = run;
 
 /***/ }),
 
-/***/ 6076:
+/***/ 2816:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9510,12 +9513,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(5329), exports);
+__exportStar(__webpack_require__(2669), exports);
 
 
 /***/ }),
 
-/***/ 5329:
+/***/ 2669:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9539,7 +9542,7 @@ exports.createProxyAgent = createProxyAgent;
 
 /***/ }),
 
-/***/ 2758:
+/***/ 3029:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9555,12 +9558,13 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(6626), exports);
+__exportStar(__webpack_require__(2702), exports);
+__exportStar(__webpack_require__(3826), exports);
 
 
 /***/ }),
 
-/***/ 6626:
+/***/ 2702:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9577,11 +9581,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.lookUpUserByEmail = exports.initializeClient = void 0;
 const web_api_1 = __webpack_require__(431);
-const proxy_client_1 = __webpack_require__(6076);
+const proxyClient_1 = __webpack_require__(2816);
 let slackClient;
 const initializeClient = (options) => {
     slackClient = new web_api_1.WebClient(options.token, {
-        agent: proxy_client_1.createProxyAgent(),
+        agent: proxyClient_1.createProxyAgent(),
     });
 };
 exports.initializeClient = initializeClient;
@@ -9598,6 +9602,16 @@ const lookUpUserByEmail = (options) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.lookUpUserByEmail = lookUpUserByEmail;
+
+
+/***/ }),
+
+/***/ 3826:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),

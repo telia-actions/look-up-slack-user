@@ -1,5 +1,5 @@
-import { setFailed, setOutput, getInput } from '@actions/core';
-import { initializeClient, lookUpUserByEmail } from './utils/slackClient';
+import { debug, setFailed, setOutput, getInput } from '@actions/core';
+import { initializeClient, lookUpUserByEmail } from './util/slackClient';
 
 export const run = async (): Promise<void> => {
   try {
@@ -14,6 +14,8 @@ export const run = async (): Promise<void> => {
 
     if (lookUpResponse.ok) {
       setOutput('user', lookUpResponse.user);
+    } else {
+      debug(`User with email: ${email} couldn't be resolved.`);
     }
   } catch (e) {
     setFailed(e.message);
