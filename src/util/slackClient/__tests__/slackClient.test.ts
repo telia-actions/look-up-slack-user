@@ -2,13 +2,13 @@ import { initializeClient, lookUpUserByEmail } from '../slackClient';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { mockPartial } from '../../mocks';
 import { InitializeClientOptions, LookUpUserByEmailOptions } from '../types';
-import * as proxyClient from '../../proxy-client';
+import * as proxyClient from '../../proxyClient';
 import * as slackWebApi from '@slack/web-api';
 import { UsersLookupByEmailResponse } from '@slack/web-api/dist/response/UsersLookupByEmailResponse';
 import { WebAPIPlatformError } from '@slack/web-api/dist/errors';
 
 jest.mock('@slack/web-api');
-jest.mock('../../proxy-client');
+jest.mock('../../proxyClient');
 
 describe('utils slack client', () => {
   const token = 'token';

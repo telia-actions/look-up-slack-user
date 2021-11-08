@@ -4,7 +4,7 @@ import { mockPartial } from '../../mocks';
 
 jest.mock('https-proxy-agent');
 
-describe('utils proxy client', () => {
+describe('util proxy client', () => {
   describe('read', () => {
     const agent = mockPartial<httpsProxyClient.HttpsProxyAgent>({
       maxSockets: 10,
