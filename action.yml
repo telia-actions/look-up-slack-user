@@ -1,0 +1,16 @@
+name: Look up Slack user
+description: Looks up Slack user by email.
+inputs:
+  email:
+    description: Email to use when resolving user Slack profile.
+    required: true
+  token:
+    description: Slack bot token.
+    required: false
+    default: ${{ secrets.SLACK_TOKEN }}
+outputs:
+  user:
+    description: Slack user profile.
+runs:
+  using: node12
+  main: dist/index.js
