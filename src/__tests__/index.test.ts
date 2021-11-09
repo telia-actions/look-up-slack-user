@@ -1,11 +1,11 @@
-import * as runner from '../runner';
+import * as githubAction from '../github-action';
 
-jest.mock('../runner');
+jest.mock('../github-action');
 
 describe('index', () => {
-  const runSpy = jest.spyOn(runner, 'run');
+  const runSpy = jest.spyOn(githubAction, 'run');
 
-  it('should start runner', async () => {
+  it('should start github action', async () => {
     require('../index');
 
     expect(runSpy).toHaveBeenCalledTimes(1);

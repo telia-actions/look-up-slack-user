@@ -9443,19 +9443,29 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6144:
+/***/ 396:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const runner_1 = __webpack_require__(3878);
-runner_1.run();
+exports.createAppContainer = void 0;
+const web_api_1 = __webpack_require__(431);
+const proxy_client_1 = __webpack_require__(9760);
+const slack_client_1 = __webpack_require__(9144);
+const createAppContainer = (config) => {
+    const slackWebClient = new web_api_1.WebClient(config.slackToken, {
+        agent: proxy_client_1.createProxyAgent(),
+    });
+    const slackClient = slack_client_1.createSlackClient({ slackWebClient });
+    return { slackClient };
+};
+exports.createAppContainer = createAppContainer;
 
 
 /***/ }),
 
-/***/ 3878:
+/***/ 8708:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9472,13 +9482,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core_1 = __webpack_require__(2186);
-const slackClient_1 = __webpack_require__(3029);
+const app_1 = __webpack_require__(396);
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const email = core_1.getInput('email');
         const token = core_1.getInput('token');
-        slackClient_1.initializeClient({ token });
-        const lookUpResponse = yield slackClient_1.lookUpUserByEmail({
+        const { slackClient } = app_1.createAppContainer({
+            slackToken: token,
+        });
+        const lookUpResponse = yield slackClient.lookUpUserByEmail({
             email,
         });
         if (lookUpResponse.ok) {
@@ -9497,7 +9509,19 @@ exports.run = run;
 
 /***/ }),
 
-/***/ 2816:
+/***/ 6144:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const github_action_1 = __webpack_require__(8708);
+github_action_1.run();
+
+
+/***/ }),
+
+/***/ 9760:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9513,12 +9537,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(2669), exports);
+__exportStar(__webpack_require__(4746), exports);
 
 
 /***/ }),
 
-/***/ 2669:
+/***/ 4746:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9542,7 +9566,7 @@ exports.createProxyAgent = createProxyAgent;
 
 /***/ }),
 
-/***/ 3029:
+/***/ 9144:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9558,14 +9582,14 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(2702), exports);
-__exportStar(__webpack_require__(3826), exports);
+__exportStar(__webpack_require__(5050), exports);
+__exportStar(__webpack_require__(3924), exports);
 
 
 /***/ }),
 
-/***/ 2702:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5050:
+/***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
 
@@ -9579,34 +9603,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.lookUpUserByEmail = exports.initializeClient = void 0;
-const web_api_1 = __webpack_require__(431);
-const proxyClient_1 = __webpack_require__(2816);
-let slackClient;
-const initializeClient = (options) => {
-    slackClient = new web_api_1.WebClient(options.token, {
-        agent: proxyClient_1.createProxyAgent(),
-    });
-};
-exports.initializeClient = initializeClient;
-const lookUpUserByEmail = (options) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    try {
-        return yield slackClient.users.lookupByEmail(options);
-    }
-    catch (e) {
-        if (((_a = e.data) === null || _a === void 0 ? void 0 : _a.error) === 'users_not_found') {
-            return e.data;
+exports.createSlackClient = void 0;
+const createSlackClient = ({ slackWebClient }) => {
+    const lookUpUserByEmail = (options) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        try {
+            return yield slackWebClient.users.lookupByEmail(options);
         }
-        throw e;
-    }
-});
-exports.lookUpUserByEmail = lookUpUserByEmail;
+        catch (e) {
+            if (((_a = e.data) === null || _a === void 0 ? void 0 : _a.error) === 'users_not_found') {
+                return e.data;
+            }
+            throw e;
+        }
+    });
+    return { lookUpUserByEmail };
+};
+exports.createSlackClient = createSlackClient;
 
 
 /***/ }),
 
-/***/ 3826:
+/***/ 3924:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";

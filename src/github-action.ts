@@ -1,14 +1,16 @@
 import { debug, setFailed, setOutput, getInput } from '@actions/core';
-import { initializeClient, lookUpUserByEmail } from './util/slackClient';
+import { createAppContainer } from './app';
 
 export const run = async (): Promise<void> => {
   try {
     const email = getInput('email');
     const token = getInput('token');
 
-    initializeClient({ token });
+    const { slackClient } = createAppContainer({
+      slackToken: token,
+    });
 
-    const lookUpResponse = await lookUpUserByEmail({
+    const lookUpResponse = await slackClient.lookUpUserByEmail({
       email,
     });
 
